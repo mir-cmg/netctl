@@ -226,7 +226,7 @@ start() {
 
     # Start the WPA supplicant and wpa_cli
     : ${WPADriver:=nl80211,wext}
-    WPAOptions+=" -W"
+    #WPAOptions+=" -W"
     if wpa_start "$interface" "$WPADriver" "$WPAConfigFile"; then
         if wpa_call "$interface" -B -a "$ACTION_SCRIPT"; then
             return 0
