@@ -37,6 +37,41 @@ install:
 	install -d $(DESTDIR)$(systemdsystemunitdir)
 	install -m644 services/*.service $(DESTDIR)$(systemdsystemunitdir)/
 
+mirinstall:
+	# Documentation
+	$(MAKE) -C docs install
+	# Configuration files
+	install -d $(DESTDIR)/etc/netctl/{hooks,interfaces}
+	echo -e "{\n \"group\": \"root\",\n \"owner\": \"root\",\n \"permission\": \"644\"\n}" > $(DESTDIR)/etc/netctl/hooks/robot.permission
+	echo -e "{\n \"group\": \"root\",\n \"owner\": \"root\",\n \"permission\": \"644\"\n}" > $(DESTDIR)/etc/netctl/interfaces/robot.permission
+	# Libs
+	install -d $(DESTDIR)/usr/lib/netctl/{connections,dhcp}
+	install -m644 src/lib/{globals,interface,ip,rfkill,wpa} $(DESTDIR)/usr/lib/netctl/
+	for f in $(DESTDIR)/usr/lib/netctl/{globals,interface,ip,rfkill,wpa} ; do \
+		echo -e "{\n \"group\": \"root\",\n \"owner\": \"root\",\n \"permission\": \"644\"\n}" > "$${f}.permission"; \
+	done
+	install -m644 src/lib/connections/wireless $(DESTDIR)/usr/lib/netctl/connections/
+	echo -e "{\n \"group\": \"root\",\n \"owner\": \"root\",\n \"permission\": \"644\"\n}" > $(DESTDIR)/usr/lib/netctl/connections/wireless.permission
+	install -m644 src/lib/dhcp/dhclient $(DESTDIR)/usr/lib/netctl/dhcp/
+	echo -e "{\n \"group\": \"root\",\n \"owner\": \"root\",\n \"permission\": \"644\"\n}" > $(DESTDIR)/usr/lib/netctl/dhcp/dhclient.permission
+	install -m755 src/lib/{auto.action,network} $(DESTDIR)/usr/lib/netctl/
+	for f in $(DESTDIR)/usr/lib/netctl/{auto.action,network} ; do \
+		echo -e "{\n \"group\": \"root\",\n \"owner\": \"root\",\n \"permission\": \"755\"\n}" > "$${f}.permission"; \
+	done
+	# Scripts
+	install -d $(DESTDIR)/usr/bin
+	install -m755 src/{netctl-auto,wifi-menu} $(DESTDIR)/usr/bin/
+	for f in $(DESTDIR)/usr/bin/{netctl-auto,wifi-menu} ; do \
+		echo -e "{\n \"group\": \"root\",\n \"owner\": \"root\",\n \"permission\": \"755\"\n}" > "$${f}.permission"; \
+	done
+	# Services
+	install -d $(DESTDIR)/etc/systemd/system/sys-subsystem-net-devices-wlp2s0.device.wants/
+	install -m644 services/netctl-auto@.service $(DESTDIR)/etc/systemd/system/sys-subsystem-net-devices-wlp2s0.device.wants/netctl-auto@wlp2s0.service
+	echo -e "{\n \"group\": \"root\",\n \"owner\": \"root\",\n \"permission\": \"644\"\n}" > $(DESTDIR)/etc/systemd/system/sys-subsystem-net-devices-wlp2s0.device.wants/netctl-auto@wlp2s0.service.permission
+	install -d $(DESTDIR)/etc/systemd/system/sys-subsystem-net-devices-wlp58s0.device.wants/
+	install -m644 services/netctl-auto@.service $(DESTDIR)/etc/systemd/system/sys-subsystem-net-devices-wlp58s0.device.wants/netctl-auto@wlp58s0.service
+	echo -e "{\n \"group\": \"root\",\n \"owner\": \"root\",\n \"permission\": \"644\"\n}" > $(DESTDIR)/etc/systemd/system/sys-subsystem-net-devices-wlp58s0.device.wants/netctl-auto@wlp58s0.service.permission
+
 tarball: netctl-$(VERSION).tar.xz
 netctl-$(VERSION).tar.xz:
 	$(MAKE) -B -C docs
