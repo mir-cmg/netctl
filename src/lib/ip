@@ -69,7 +69,7 @@ ip_set() {
 
     case $IP in
       dhcp)
-        dhcp_call "${DHCPClient:-dhcpcd}" start 4 || return
+        dhcp_call "${DHCPClient:-dhclient}" start 4 || return
       ;;
       static)
         for addr in "${Address[@]}"; do
@@ -173,7 +173,7 @@ ip_set() {
 # $IP: type of IPv4 configuration
 # $IP6: type of IPv6 configuration
 ip_unset() {
-    [[ $IP == "dhcp" ]] && dhcp_call "${DHCPClient:-dhcpcd}" stop 4
+    [[ $IP == "dhcp" ]] && dhcp_call "${DHCPClient:-dhclient}" stop 4
     [[ $IP6 == dhcp* ]] && dhcp_call "${DHCP6Client:-dhclient}" stop 6
     [[ $Hostname ]] && do_debug hostnamectl --transient set-hostname ""
     [[ $DNS ]] && resolvconf -d "$Interface"

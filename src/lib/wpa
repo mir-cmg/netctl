@@ -206,7 +206,7 @@ wpa_make_config_file() {
     fi
 
     echo "ctrl_interface=/run/wpa_supplicant" >> "$config_file"
-    echo "ctrl_interface_group=${WPAGroup:-wheel}" >> "$config_file"
+    echo "ctrl_interface_group=${WPAGroup:-systemd-network}" >> "$config_file"
     [[ $Country ]] && echo "country=$Country" >> "$config_file"
     if is_yes "${AdHoc:-no}"; then
         echo "ap_scan=2" >> "$config_file"

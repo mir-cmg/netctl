@@ -302,7 +302,7 @@ of the `wireless' type:
 
 'WPAGroup='::
     Group that has the authority to configure *wpa_supplicant* via its
-    control interface. Defaults to `++wheel++'.
+    control interface. Defaults to `++systemd-network++'.
 
 'WPADriver='::
     The *wpa_supplicant* driver to use. Defaults to `++nl80211,wext++'.
