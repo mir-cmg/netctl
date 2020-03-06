@@ -92,7 +92,7 @@ wpa_start() {
         return 127
     fi
 
-    do_debug wpa_supplicant -q -B -P "$pidfile" -i "$interface" -D "$driver" \
+    do_debug wpa_supplicant -dd -B -P "$pidfile" -i "$interface" -D "$driver" \
                             "$configuration" $WPAOptions >&2
 
     # Wait up to one second for the pid file to appear
